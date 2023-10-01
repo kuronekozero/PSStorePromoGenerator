@@ -1,3 +1,4 @@
+import os
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
@@ -80,7 +81,7 @@ class Application(tk.Tk):
         if discount:
             editor.add_text(discount, (60, 60), "fonts/Montserrat-Black.ttf", 500, "black")
 
-        # Накладываем шаблон на выбранное изображение
+            # Накладываем шаблон на выбранное изображение
         background = Image.open(self.image_path.get())
 
         # Изменяем размер фонового изображения и обрезаем его до размера шаблона
@@ -102,7 +103,14 @@ class Application(tk.Tk):
 
         background.paste(editor.image.resize(background.size), (0, 0), editor.image.resize(background.size))
 
-        background.save("output/output.png")
+        # Сохраняем изображение с уникальным именем файла
+        output_path = "output/output.png"
+        i = 1
+        while os.path.exists(output_path):
+            output_path = f"output/output{i}.png"
+            i += 1
+
+        background.save(output_path)
 
 
 if __name__ == "__main__":
