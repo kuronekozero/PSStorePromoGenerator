@@ -78,11 +78,22 @@ class Application(tk.Tk):
         editor.add_text(platforms, (330, 3300), "fonts/Montserrat-Bold.ttf", 130, "white")
         editor.add_text(game_version, (240, 3750), "fonts/Montserrat-Bold.ttf", 130, "gray")
 
-        if discount:
-            editor.add_text(discount, (60, 60), "fonts/Montserrat-Black.ttf", 500, "black")
+        # Load the discount square image
+        discount_square = Image.open("square.png")
 
-            # Накладываем шаблон на выбранное изображение
+        # Resize the discount square image (replace 'new_width' and 'new_height' with your desired size)
+        discount_square = discount_square.resize((1000, 1000))
+
+        # Open the background image
         background = Image.open(self.image_path.get())
+
+        # Paste the discount square onto the background (replace 'x' and 'y' with your desired coordinates)
+        if discount:
+            editor.add_text(discount, (3000, 4000), "fonts/Montserrat-Black.ttf", 400, "black")
+            background.paste(discount_square, (800, 1800), discount_square)
+
+        # # Накладываем шаблон на выбранное изображение
+        # background = Image.open(self.image_path.get())
 
         # Изменяем размер фонового изображения и обрезаем его до размера шаблона
         width_ratio = editor.image.width / background.width
