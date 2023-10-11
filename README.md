@@ -3,7 +3,7 @@
 A tool that I made to automatically generate promotional images for one VK community that resells PlayStation Store video games in Turkey region. 
 This tool lets you generate images like the following one without the need of opening Photoshop or any other similar editing tool.
 
-![Image](output.png | width=100)
+![Image | 50%](output.png)
 
 ## How to use it 
 Never really bothered creating an .EXE file for this project so I was just lounching it straight from PyCharm. But if you really want to use or customize it I guess you can try to create one, 
