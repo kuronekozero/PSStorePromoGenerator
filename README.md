@@ -19,9 +19,13 @@ That's it!
 Feel free to use this program however you like.
 
 ## Main Tech Stack
+
 **Python**
+
 **TKinter**
+
 **Pillow**
+
 **BeautifulSoup4**
 
 ## Additional information
