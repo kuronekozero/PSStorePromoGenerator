@@ -82,15 +82,10 @@ class Application(tk.Tk):
         discount_square = Image.open("square.png")
 
         # Resize the discount square image (replace 'new_width' and 'new_height' with your desired size)
-        discount_square = discount_square.resize((1000, 1000))
+        discount_square = discount_square.resize((1050, 1050))
 
         # Open the background image
         background = Image.open(self.image_path.get())
-
-        # Paste the discount square onto the background (replace 'x' and 'y' with your desired coordinates)
-        if discount:
-            editor.add_text(discount, (3000, 4000), "fonts/Montserrat-Black.ttf", 400, "black")
-            background.paste(discount_square, (800, 1800), discount_square)
 
         # # Накладываем шаблон на выбранное изображение
         # background = Image.open(self.image_path.get())
@@ -111,6 +106,13 @@ class Application(tk.Tk):
                                       top_margin,
                                       left_margin + editor.image.width,
                                       top_margin + editor.image.height))
+
+        background.paste(editor.image.resize(background.size), (0, 0), editor.image.resize(background.size))
+
+        # Paste the discount square onto the image (replace 'x' and 'y' with your desired coordinates)
+        if discount:
+            editor.image.paste(discount_square, (2900, 3700), discount_square)
+            editor.add_text(discount, (2960, 3990), "fonts/Montserrat-Black.ttf", 400, "white")
 
         background.paste(editor.image.resize(background.size), (0, 0), editor.image.resize(background.size))
 
