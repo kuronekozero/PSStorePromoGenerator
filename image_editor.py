@@ -22,6 +22,7 @@ class ImageEditor:
         text_color = "black"
         self.draw.text(position, text, fill=text_color, font=font)
 
+
     def create_gradient(self, width, height, start_color, end_color):
         base = Image.new('RGB', (width, height), start_color)
         top = Image.new('RGB', (width, height), end_color)
