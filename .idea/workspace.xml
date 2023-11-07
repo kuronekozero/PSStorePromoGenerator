@@ -3,7 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="56a40afc-c646-4ba7-9033-0a6bbc629fba" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/image_editor.py" beforeDir="false" afterPath="$PROJECT_DIR$/image_editor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/output.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/output1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/output2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/output3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/output4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/output5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

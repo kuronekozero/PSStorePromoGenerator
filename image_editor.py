@@ -39,7 +39,7 @@ class ImageEditor:
         font = ImageFont.truetype(font_path, font_size)
 
         # Получаем размеры текста
-        text_width, text_height = self.draw.textbbox((x, y, x + 1, y + 1), text, font=font)[2:]
+        text_width, text_height = font.getsize(text)
 
         # Создаем изображение с градиентом
         gradient = self.create_gradient(text_width, text_height, (81, 97, 234), (70, 140, 254))

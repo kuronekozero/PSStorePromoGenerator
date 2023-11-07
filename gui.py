@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 from image_editor import *
+from scraper import parse_game_info
 
 
 class Application(tk.Tk):
@@ -10,9 +11,15 @@ class Application(tk.Tk):
         super().__init__()
 
         self.title("PS Store Reseller App")
-        self.geometry("500x400")
+        self.geometry("500x500")
 
         # Создаем поля для ввода
+        self.create_label_entry("Ссылка:", "game_link")  # Добавляем новое поле для ввода ссылки
+
+        # Создаем кнопку для парсинга
+        parse_button = ttk.Button(self, text="Парсить", command=self.parse)  # Добавляем новую кнопку для парсинга
+        parse_button.pack(pady=10)
+
         self.create_label_entry("Название:", "game_name")
         self.create_label_combobox("Русский язык:", "russian_language",
                                    ["РУССКИЕ СУБТИТРЫ", "ПОЛНОСТЬЮ НА РУССКОМ", "АНГЛИЙСКИЙ ЯЗЫК"])
@@ -29,6 +36,17 @@ class Application(tk.Tk):
         # Создаем кнопку отправить
         submit_button = ttk.Button(self, text="Отправить", command=self.submit)
         submit_button.pack(pady=10)
+
+    def parse(self):
+        # Получаем ссылку из поля для ввода
+        game_link = self.game_link.get()
+
+        # Парсим информацию с сайта
+        game_name, platforms = parse_game_info(game_link)
+
+        # Заполняем поля для ввода
+        self.game_name.set(game_name)
+        self.platforms.set(platforms)
 
     def create_label_entry(self, label_text, entry_var_name):
         # Создаем метку
