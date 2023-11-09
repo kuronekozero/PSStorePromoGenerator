@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+from converter import convert_price
 
 def parse_game_info(url):
     # Отправляем запрос на сервер и получаем HTML-код страницы
@@ -22,7 +23,13 @@ def parse_game_info(url):
 
     # Ищем тег <meta> с атрибутом itemprop="price" и извлекаем значение его атрибута content
     price_element = soup.find('meta', {'itemprop': 'price'})
-    price = price_element['content'] if price_element else ''
+    price_in_lira = float(price_element['content']) if price_element else 0
+
+    # Конвертируем цену в рубли
+    price_in_rubles = convert_price(price_in_lira)
+
+    # Добавляем символ рубля к цене
+    price = f"{price_in_rubles}₽"
 
     # Ищем тег <span> с классом "game-cover-save-bonus" и извлекаем его текст
     discount_bonus_element = soup.find('span', {'class': 'game-cover-save-bonus'})
@@ -46,21 +53,38 @@ def parse_game_info(url):
             platforms = list_element.find('span', {'itemprop': 'name'}).text
             break
 
-    return game_title, platforms, price, discount
+    # Ищем ссылку на страницу игры в PS Store
+    ps_store_link_element = soup.find('a', {'class': 'game-buy-button-href'})
+    ps_store_link = ps_store_link_element['href'] if ps_store_link_element else ''
 
+    # Отправляем запрос на сервер и получаем HTML-код страницы PS Store
+    response = requests.get(ps_store_link)
+    html = response.text
 
+    # Создаем объект BeautifulSoup для парсинга HTML
+    soup = BeautifulSoup(html, 'html.parser')
 
+    # Ищем теги <dd> с атрибутами data-qa для PS4 и PS5
+    voice_values = []
+    for attr in ["gameInfo#releaseInformation#voice-value", "gameInfo#releaseInformation#ps4Voice-value", "gameInfo#releaseInformation#ps5Voice-value"]:
+        element = soup.find('dd', {'data-qa': attr})
+        if element:
+            voice_values.append(element.text)
 
+    subtitles_values = []
+    for attr in ["gameInfo#releaseInformation#subtitles-value", "gameInfo#releaseInformation#ps4Subtitles-value", "gameInfo#releaseInformation#ps5Subtitles-value"]:
+        element = soup.find('dd', {'data-qa': attr})
+        if element:
+            subtitles_values.append(element.text)
 
+    # Проверяем, содержат ли тексты "Rusça"
+    if any("Rusça" in value for value in voice_values):
+        language = "ПОЛНОСТЬЮ НА РУССКОМ ЯЗЫКЕ"
+    elif any("Rusça" in value for value in subtitles_values):
+        language = "РУССКИЕ СУБТИТРЫ"
+    elif voice_values or subtitles_values:  # Если были найдены теги с информацией о языке
+        language = "АНГЛИЙСКИЙ ЯЗЫК"
+    else:
+        language = ""  # Если теги с информацией о языке не были найдены
 
-
-
-
-
-
-
-
-
-
-
-
+    return game_title, platforms, price, discount, language

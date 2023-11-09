@@ -42,13 +42,15 @@ class Application(tk.Tk):
         game_link = self.game_link.get()
 
         # Парсим информацию с сайта
-        game_name, platforms, price, discount = parse_game_info(game_link)
+        game_name, platforms, price, discount, language = parse_game_info(game_link)
+
 
         # Заполняем поля для ввода
         self.game_name.set(game_name)
         self.platforms.set(platforms)
         self.game_price.set(price)
         self.discount.set(discount)  # Устанавливаем значение поля "Скидка"
+        self.russian_language.set(language)
 
     def create_label_entry(self, label_text, entry_var_name):
         # Создаем метку
