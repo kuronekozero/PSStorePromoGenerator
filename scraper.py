@@ -19,7 +19,7 @@ def parse_game_info(url):
 
     # Ищем все теги <a> с атрибутом itemprop="item" и извлекаем текст из вложенных тегов <span>
     platform_elements = game_info_div.find_all('a', {'itemprop': 'item'})
-    platforms = [platform.find('span', {'itemprop': 'name'}).text for platform in platform_elements]
+    platforms = [platform.find('span', {'itemprop': 'name'}).text.replace(' ', '') for platform in platform_elements]
 
     # Ищем тег <meta> с атрибутом itemprop="price" и извлекаем значение его атрибута content
     price_element = soup.find('meta', {'itemprop': 'price'})
@@ -50,7 +50,7 @@ def parse_game_info(url):
     for list_element in list_elements:
         meta_tag = list_element.find('meta', {'itemprop': 'position', 'content': '3'})
         if meta_tag:
-            platforms = list_element.find('span', {'itemprop': 'name'}).text
+            platforms = list_element.find('span', {'itemprop': 'name'}).text.replace(' ', '')
             break
 
     # Ищем ссылку на страницу игры в PS Store
@@ -79,7 +79,7 @@ def parse_game_info(url):
 
     # Проверяем, содержат ли тексты "Rusça"
     if any("Rusça" in value for value in voice_values):
-        language = "ПОЛНОСТЬЮ НА РУССКОМ ЯЗЫКЕ"
+        language = "ПОЛНОСТЬЮ НА РУССКОМ"
     elif any("Rusça" in value for value in subtitles_values):
         language = "РУССКИЕ СУБТИТРЫ"
     elif voice_values or subtitles_values:  # Если были найдены теги с информацией о языке
