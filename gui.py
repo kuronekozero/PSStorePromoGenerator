@@ -109,34 +109,34 @@ class Application(tk.Tk):
         # Open the background image
         background = Image.open(self.image_path.get())
 
-        # # Накладываем шаблон на выбранное изображение
-        # background = Image.open(self.image_path.get())
+        # Изменяем размер фонового изображения
+        width_ratio = 4096 / background.width
+        height_ratio = 3565 / background.height
+        ratio = max(width_ratio, height_ratio)
+        new_width = int(background.width * ratio)
+        new_height = int(background.height * ratio)
+        background = background.resize((new_width, new_height))
 
-        # Изменяем размер фонового изображения и обрезаем его до размера шаблона
-        width_ratio = editor.image.width / background.width
-        height_ratio = editor.image.height / background.height
+        # Обрезаем фоновое изображение
+        left_margin = (background.width - 4096) / 2
+        top_margin = (background.height - 3565) / 2
+        background = background.crop((left_margin, top_margin, left_margin + 4096, top_margin + 3565))
 
-        new_width = max(background.width * height_ratio, editor.image.width)
-        new_height = max(background.height * width_ratio, editor.image.height)
+        # Создаем черное изображение нужного размера
+        black_square = Image.new('RGB', (4096, 4857 - 3565), color='black')
 
-        background = background.resize((int(new_width), int(new_height)))
-
-        left_margin = (background.width - editor.image.width) / 2
-        top_margin = (background.height - editor.image.height) / 2
-
-        background = background.crop((left_margin,
-                                      top_margin,
-                                      left_margin + editor.image.width,
-                                      top_margin + editor.image.height))
-
-        background.paste(editor.image.resize(background.size), (0, 0), editor.image.resize(background.size))
+        # Объединяем фоновое изображение и черный квадрат
+        final_image = Image.new('RGB', (4096, 4857))
+        final_image.paste(background, (0, 0))
+        final_image.paste(black_square, (0, 3565))
 
         # Paste the discount square onto the image (replace 'x' and 'y' with your desired coordinates)
         if discount:
             editor.image.paste(discount_square, (2900, 3700), discount_square)
-            editor.add_text(discount, (2960, 3990), "fonts/Montserrat-Black.ttf", 400, "white")
+            editor.add_text(discount, (2960, 4005), "fonts/Montserrat-Black.ttf", 340, "white")
 
-        background.paste(editor.image.resize(background.size), (0, 0), editor.image.resize(background.size))
+        # Накладываем шаблон на фоновое изображение
+        final_image.paste(editor.image.resize((4096, 4857)), (0, 0), editor.image.resize((4096, 4857)))
 
         # Сохраняем изображение с уникальным именем файла
         output_path = "output/output.png"
@@ -145,7 +145,7 @@ class Application(tk.Tk):
             output_path = f"output/output{i}.png"
             i += 1
 
-        background.save(output_path)
+        final_image.save(output_path)
 
 
 if __name__ == "__main__":

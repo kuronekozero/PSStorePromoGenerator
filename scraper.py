@@ -87,4 +87,7 @@ def parse_game_info(url):
     else:
         language = ""  # Если теги с информацией о языке не были найдены
 
+    discount = "-" + str(discount)
+    print(discount)
+
     return game_title, platforms, price, discount, language
