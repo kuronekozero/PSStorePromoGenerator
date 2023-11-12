@@ -31,9 +31,34 @@ def parse_game_info(url):
     # Добавляем символ рубля к цене
     price = f"{price_in_rubles}₽"
 
+    month_dict = {
+        "Oca": "Января",
+        "Şub": "Февраля",
+        "Mar": "Марта",
+        "Nīs": "Апреля",
+        "May": "Мая",
+        "Haz": "Июня",
+        "Tem": "Июля",
+        "Ağu": "Августа",
+        "Eyl": "Сентября",
+        "Eki": "Октября",
+        "Kas": "Ноября",
+        "Ara": "Декабря"
+    }
+
     # Ищем тег <span> с классом "game-cover-save-bonus" и извлекаем его текст
     discount_bonus_element = soup.find('span', {'class': 'game-cover-save-bonus'})
     discount_regular_element = soup.find('span', {'class': 'game-cover-save-regular'})
+
+    # Ищем тег <p> с классом "game-cover-bottom-small" и извлекаем его текст
+    discount_end_date_element = soup.find('p', {'class': 'game-cover-bottom-small'})
+    if discount_end_date_element:
+        discount_end_date = discount_end_date_element.text.replace("Ends:", "Скидка действует до:")
+        # Заменяем турецкие сокращения на русские названия месяцев
+        for turkish, russian in month_dict.items():
+            discount_end_date = discount_end_date.replace(turkish, russian)
+    else:
+        discount_end_date = ''
 
     if discount_bonus_element:
         discount = discount_bonus_element.text
@@ -88,6 +113,5 @@ def parse_game_info(url):
         language = ""  # Если теги с информацией о языке не были найдены
 
     discount = "-" + str(discount)
-    print(discount)
 
-    return game_title, platforms, price, discount, language
+    return game_title, platforms, price, discount, language, discount_end_date

@@ -6,17 +6,17 @@ def convert_price(price_in_lira):
 
     # Выбираем коэффициент для конвертации в рубли в зависимости от цены
     if price_in_lira < 100:
-        coefficient = 5.4
+        coefficient = 5
     elif price_in_lira < 699:
-        coefficient = 4.85
-    elif price_in_lira < 1199:
         coefficient = 4.6
-    elif price_in_lira < 1799:
+    elif price_in_lira < 1199:
         coefficient = 4.3
+    elif price_in_lira < 1799:
+        coefficient = 4.1
     else:
-        coefficient = 4.2
+        coefficient = 4
 
-    if coefficient == 5.4:
+    if coefficient == 5:
         pass
     else:
         # Прибавляем 7% к цене

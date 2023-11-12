@@ -11,7 +11,7 @@ class Application(tk.Tk):
         super().__init__()
 
         self.title("PS Store Reseller App")
-        self.geometry("500x500")
+        self.geometry("500x550")
 
         # Создаем поля для ввода
         self.create_label_entry("Ссылка:", "game_link")  # Добавляем новое поле для ввода ссылки
@@ -24,9 +24,10 @@ class Application(tk.Tk):
         self.create_label_combobox("Русский язык:", "russian_language",
                                    ["РУССКИЕ СУБТИТРЫ", "ПОЛНОСТЬЮ НА РУССКОМ", "АНГЛИЙСКИЙ ЯЗЫК"])
         self.create_label_combobox("Платформы:", "platforms", ["PS4", "PS5", "PS4/PS5"])
-        self.create_label_entry("Версия игры:", "game_version")
+        self.create_label_combobox("Версия игры:", "game_version", ["Standard Edition", "Deluxe Edition"])
         self.create_label_entry("Цена:", "game_price")
         self.create_label_entry("Скидка:", "discount")
+        self.create_label_entry("Дата окончания скидки:", "discount_end_date")
 
         # Создаем кнопку для выбора изображения
         self.image_path = tk.StringVar()
@@ -42,8 +43,7 @@ class Application(tk.Tk):
         game_link = self.game_link.get()
 
         # Парсим информацию с сайта
-        game_name, platforms, price, discount, language = parse_game_info(game_link)
-
+        game_name, platforms, price, discount, language, discount_end_date = parse_game_info(game_link)
 
         # Заполняем поля для ввода
         self.game_name.set(game_name)
@@ -51,6 +51,7 @@ class Application(tk.Tk):
         self.game_price.set(price)
         self.discount.set(discount)  # Устанавливаем значение поля "Скидка"
         self.russian_language.set(language)
+        self.discount_end_date.set(discount_end_date)  # Добавьте эту строку
 
     def create_label_entry(self, label_text, entry_var_name):
         # Создаем метку
@@ -87,6 +88,7 @@ class Application(tk.Tk):
         game_version = self.game_version.get()
         game_price = self.game_price.get()
         discount = self.discount.get()
+        discount_end_date = self.discount_end_date.get()
 
         # Создаем экземпляр ImageEditor и добавляем текст на изображение
         editor = ImageEditor("newtemplate.png")
@@ -94,7 +96,7 @@ class Application(tk.Tk):
         editor.add_text(game_name, (240, 3450), "fonts/Montserrat-Regular.ttf", 250, "black")
 
         # Используем функцию add_gradient_text для добавления цены с градиентом
-        editor.add_gradient_text(game_price, (230, 3800), "fonts/Montserrat-Bold.ttf", 750)
+        editor.add_gradient_text(game_price, (230, 3780), "fonts/Montserrat-Bold.ttf", 750)
 
         editor.add_text(russian_language, (1020, 3310), "fonts/Montserrat-Bold.ttf", 110, "white")
         editor.add_text(platforms, (330, 3300), "fonts/Montserrat-Bold.ttf", 130, "white")
@@ -134,6 +136,7 @@ class Application(tk.Tk):
         if discount:
             editor.image.paste(discount_square, (2900, 3700), discount_square)
             editor.add_text(discount, (2960, 4005), "fonts/Montserrat-Black.ttf", 340, "white")
+            editor.add_text(discount_end_date, (1760, 4540), "fonts/Montserrat-Bold.ttf", 100, "gray")
 
         # Накладываем шаблон на фоновое изображение
         final_image.paste(editor.image.resize((4096, 4857)), (0, 0), editor.image.resize((4096, 4857)))
