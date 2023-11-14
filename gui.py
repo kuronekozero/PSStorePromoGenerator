@@ -40,10 +40,10 @@ class Application(tk.Tk):
 
     def parse(self):
         # Получаем ссылку из поля для ввода
-        game_link = self.game_link.get()
+        self.game_link = self.game_link.get()
 
         # Парсим информацию с сайта
-        game_name, platforms, price, discount, language, discount_end_date = parse_game_info(game_link)
+        game_name, platforms, price, discount, language, discount_end_date = parse_game_info(self.game_link)
 
         # Заполняем поля для ввода
         self.game_name.set(game_name)
@@ -101,6 +101,19 @@ class Application(tk.Tk):
         editor.add_text(russian_language, (1020, 3310), "fonts/Montserrat-Bold.ttf", 110, "white")
         editor.add_text(platforms, (330, 3300), "fonts/Montserrat-Bold.ttf", 130, "white")
         editor.add_text(game_version, (240, 3750), "fonts/Montserrat-Bold.ttf", 130, "gray")
+
+        # Определяем регион игры и загружаем соответствующее изображение
+        if "ua-store" in self.game_link:
+            region_image = Image.open("ukraine.png")
+        elif "tr-store" in self.game_link:
+            region_image = Image.open("turkey.png")
+
+        # Изменяем размер изображения, сохраняя пропорции
+        max_size = (1080, 1080)
+        region_image.thumbnail(max_size)
+
+        # Добавляем изображение региона на итоговое изображение
+        editor.image.paste(region_image, (2630, 3270), region_image)
 
         # Load the discount square image
         discount_square = Image.open("square.png")
