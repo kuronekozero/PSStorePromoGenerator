@@ -4,6 +4,7 @@ from tkinter import ttk
 from tkinter import filedialog
 from image_editor import *
 from scraper import parse_game_info
+from settings import SettingsWindow
 
 
 class Application(tk.Tk):
@@ -11,7 +12,7 @@ class Application(tk.Tk):
         super().__init__()
 
         self.title("PS Store Reseller App")
-        self.geometry("500x550")
+        self.geometry("500x600")
 
         # Создаем поля для ввода
         self.create_label_entry("Ссылка:", "game_link")  # Добавляем новое поле для ввода ссылки
@@ -37,6 +38,14 @@ class Application(tk.Tk):
         # Создаем кнопку отправить
         submit_button = ttk.Button(self, text="Отправить", command=self.submit)
         submit_button.pack(pady=10)
+
+        # Добавляем кнопку "Настройки"
+        settings_button = tk.Button(self, text="Настройки", command=self.open_settings)
+        settings_button.pack(pady=10)
+
+    def open_settings(self):
+        # Создаем новое окно настроек
+        settings_window = SettingsWindow(self)
 
     def parse(self):
         # Получаем ссылку из поля для ввода
