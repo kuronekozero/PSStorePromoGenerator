@@ -1,71 +1,60 @@
 import math
 import json
+import os
 
-# Определите ваши переменные здесь
-less100tr = 5
-less699tr = 4.6
-less1199tr = 4.3
-less1799tr = 4.1
-more1799tr = 4
-percenttr = 0.07
-
-less100ua = 3
-less699ua = 2.8
-less1199ua = 2.5
-less1799ua = 2.3
-more1799ua = 2
-percentua = 0.07
-
-def save_coefficients(coefficients):
-    with open('coefficients.json', 'w') as f:
-        json.dump(coefficients, f)
-
-def load_coefficients():
-    try:
-        with open('coefficients.json', 'r') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return None
+def load_coefficients(region):
+    filename = f"coefficients{region}.json"
+    if os.path.exists(filename):
+        with open(filename, "r") as file:
+            coefficients = json.load(file)
+    else:
+        coefficients = None
+    return coefficients
 
 def convert_price(price_in_currency, region):
+    # Загружаем коэффициенты
+    coefficients = load_coefficients(region)
+    if coefficients is None:
+        print(f"Не удалось загрузить коэффициенты для региона {region}")
+        return None
+
     # Округляем цену в большую сторону до целых единиц
     price_in_currency = math.ceil(price_in_currency)
 
     # Выбираем коэффициент для конвертации в рубли в зависимости от цены
-    if region == "tr-store":
+    if region == "tr":
         if price_in_currency < 100:
-            coefficient = less100tr
+            coefficient = coefficients[f"less100{region}"]
         elif price_in_currency < 699:
-            coefficient = less699tr
+            coefficient = coefficients[f"less699{region}"]
         elif price_in_currency < 1199:
-            coefficient = less1199tr
+            coefficient = coefficients[f"less1199{region}"]
         elif price_in_currency < 1799:
-            coefficient = less1799tr
+            coefficient = coefficients[f"less1799{region}"]
         else:
-            coefficient = more1799tr
-
-        if coefficient != less100tr:
-            # Прибавляем 7% к цене
-            price_in_currency += price_in_currency * percenttr
-
-    elif region == "ua-store":
-        if price_in_currency < 100:
-            coefficient = less100ua
-        elif price_in_currency < 699:
-            coefficient = less699ua
-        elif price_in_currency < 1199:
-            coefficient = less1199ua
-        elif price_in_currency < 1799:
-            coefficient = less1799ua
+            coefficient = coefficients[f"more1799{region}"]
+    elif region == "ua":
+        if price_in_currency < 300:
+            coefficient = coefficients[f"less300{region}"]
+        elif price_in_currency < 1499:
+            coefficient = coefficients[f"less1499{region}"]
+        elif price_in_currency < 1999:
+            coefficient = coefficients[f"less1999{region}"]
         else:
-            coefficient = more1799ua
+            coefficient = coefficients[f"more1999{region}"]
 
-        if coefficient != less100ua:
-            # Прибавляем 7% к цене
-            price_in_currency += price_in_currency * percentua
+    if region == "tr" and coefficient != coefficients[f"less100{region}"]:
+        # Прибавляем процент к цене
+        price_in_currency += price_in_currency * coefficients[f"percent{region}"]
+    elif region == "ua" and coefficient != coefficients[f"less300{region}"]:
+        # Прибавляем процент к цене
+        price_in_currency += price_in_currency * coefficients[f"percent{region}"]
 
-    # Округляем цену в большую сторону до целых единиц
-    price_in_currency = math.ceil(price_in_currency)
+    # Округляем цену в большую сторону до целых единиц или десятков в зависимости от региона
+    if region == "ua":
+        price_in_currency = math.ceil(price_in_currency / 10.0) * 10
+    else:
+        price_in_currency = math.ceil(price_in_currency)
 
     # Конвертируем цену в рубли
     price_in_rubles = price_in_currency * coefficient
@@ -74,3 +63,6 @@ def convert_price(price_in_currency, region):
     price_in_rubles = math.ceil(price_in_rubles / 10.0) * 10
 
     return price_in_rubles
+
+
+

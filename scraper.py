@@ -27,9 +27,9 @@ def parse_game_info(game_link):
 
     # Определяем регион игры
     if "ua-store" in game_link:
-        region = "ua-store"
+        region = "ua"
     elif "tr-store" in game_link:
-        region = "tr-store"
+        region = "tr"
 
     # Конвертируем цену в рубли
     price_in_rubles = convert_price(price_in_lira, region)
