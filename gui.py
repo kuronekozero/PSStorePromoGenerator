@@ -100,17 +100,26 @@ class Application(tk.Tk):
         discount = self.discount.get()
         discount_end_date = self.discount_end_date.get()
 
+        discount_position_square = [3000, 3620]
+        discount_position_text = [3020, 3810]
+
         # Создаем экземпляр ImageEditor и добавляем текст на изображение
         editor = ImageEditor("newtemplate.png")
 
-        editor.add_text(game_name, (240, 3450), "fonts/Montserrat-Regular.ttf", 250, "black")
+        editor.add_text(game_name, (700, 3250), "fonts/Montserrat-Regular.ttf", 150, "black")
 
         # Используем функцию add_gradient_text для добавления цены с градиентом
-        editor.add_gradient_text(game_price, (230, 3780), "fonts/Montserrat-Bold.ttf", 750)
+        editor.add_gradient_text(game_price, (705, 3600), "fonts/Montserrat-Bold.ttf", 600)
 
-        editor.add_text(russian_language, (1020, 3310), "fonts/Montserrat-Bold.ttf", 110, "white")
-        editor.add_text(platforms, (330, 3300), "fonts/Montserrat-Bold.ttf", 130, "white")
-        editor.add_text(game_version, (240, 3750), "fonts/Montserrat-Bold.ttf", 130, "gray")
+        editor.add_text(russian_language, (1320, 3100), "fonts/Montserrat-Bold.ttf", 85, "white")
+        editor.add_text(platforms, (750, 3090), "fonts/Montserrat-Bold.ttf", 110, "white")
+        editor.add_text(game_version, (705, 3430), "fonts/Montserrat-Bold.ttf", 130, "gray")
+
+        if len(game_price) >= 6:
+            pass
+        else:
+            discount_position_square[0] -= 250
+            discount_position_text[0] -= 250
 
         # Определяем регион игры и загружаем соответствующее изображение
         if "ua-store" in game_link:
@@ -119,17 +128,17 @@ class Application(tk.Tk):
             region_image = Image.open("turkey.png")
 
         # Изменяем размер изображения, сохраняя пропорции
-        max_size = (1080, 1080)
+        max_size = (838, 838)
         region_image.thumbnail(max_size)
 
         # Добавляем изображение региона на итоговое изображение
-        editor.image.paste(region_image, (2630, 3270), region_image)
+        editor.image.paste(region_image, (2570, 3071), region_image)
 
         # Load the discount square image
         discount_square = Image.open("square.png")
 
         # Resize the discount square image (replace 'new_width' and 'new_height' with your desired size)
-        discount_square = discount_square.resize((1050, 1050))
+        discount_square = discount_square.resize((650, 650))
 
         # Open the background image
         background = Image.open(self.image_path.get())
@@ -157,9 +166,9 @@ class Application(tk.Tk):
 
         # Paste the discount square onto the image (replace 'x' and 'y' with your desired coordinates)
         if discount:
-            editor.image.paste(discount_square, (2900, 3700), discount_square)
-            editor.add_text(discount, (2960, 4005), "fonts/Montserrat-Black.ttf", 340, "white")
-            editor.add_text(discount_end_date, (1760, 4540), "fonts/Montserrat-Bold.ttf", 100, "gray")
+            editor.image.paste(discount_square, discount_position_square, discount_square)
+            editor.add_text(discount, discount_position_text, "fonts/Montserrat-Black.ttf", 220, "white")
+            editor.add_text(discount_end_date, (1200, 4300), "fonts/Montserrat-Bold.ttf", 100, "gray")
 
         # Накладываем шаблон на фоновое изображение
         final_image.paste(editor.image.resize((4096, 4857)), (0, 0), editor.image.resize((4096, 4857)))
