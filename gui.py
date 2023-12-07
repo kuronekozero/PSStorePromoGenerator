@@ -95,21 +95,27 @@ class Application(tk.Tk):
         game_name = self.game_name.get()
         russian_language = self.russian_language.get()
         platforms = self.platforms.get()
+
         game_version = self.game_version.get()
         game_price = self.game_price.get()
         discount = self.discount.get()
         discount_end_date = self.discount_end_date.get()
 
         discount_position_square = [3000, 3620]
-        discount_position_text = [3020, 3810]
+        discount_position_text = [3030, 3810]
 
-        # Создаем экземпляр ImageEditor и добавляем текст на изображение
-        editor = ImageEditor("newtemplate.png")
+        if discount:
+            editor = ImageEditor("newtemplate.png")
+            price_position = [705, 3600]
+        else:
+            # Создаем экземпляр ImageEditor и добавляем текст на изображение
+            editor = ImageEditor("newtemplate2.png")
+            price_position = [705, 3500]
 
         editor.add_text(game_name, (700, 3250), "fonts/Montserrat-Regular.ttf", 150, "black")
 
         # Используем функцию add_gradient_text для добавления цены с градиентом
-        editor.add_gradient_text(game_price, (705, 3600), "fonts/Montserrat-Bold.ttf", 600)
+        editor.add_gradient_text(game_price, price_position, "fonts/Montserrat-Bold.ttf", 600)
 
         editor.add_text(russian_language, (1320, 3100), "fonts/Montserrat-Bold.ttf", 85, "white")
         editor.add_text(platforms, (750, 3090), "fonts/Montserrat-Bold.ttf", 110, "white")
