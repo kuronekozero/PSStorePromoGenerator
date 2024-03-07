@@ -5,6 +5,7 @@ from tkinter import filedialog
 from image_editor import *
 from scraper import parse_game_info
 from settings import SettingsWindow
+from calculator import CalculatorWindow
 
 
 class Application(tk.Tk):
@@ -12,7 +13,7 @@ class Application(tk.Tk):
         super().__init__()
 
         self.title("PS Store Reseller App")
-        self.geometry("500x600")
+        self.geometry("500x650")
 
         # Создаем поля для ввода
         self.create_label_entry("Ссылка:", "game_link")  # Добавляем новое поле для ввода ссылки
@@ -43,9 +44,17 @@ class Application(tk.Tk):
         settings_button = tk.Button(self, text="Настройки", command=self.open_settings)
         settings_button.pack(pady=10)
 
+        # Добавляем кнопку "Калькулятор"
+        calculator_button = tk.Button(self, text="Калькулятор", command=self.open_calculator)
+        calculator_button.pack(pady=10)
+
     def open_settings(self):
         # Создаем новое окно настроек
         settings_window = SettingsWindow(self)
+
+    def open_calculator(self):
+        # Создаем новое окно калькулятор
+        calculator_window = CalculatorWindow(self)
 
     def parse(self):
         # Получаем ссылку из поля для ввода
